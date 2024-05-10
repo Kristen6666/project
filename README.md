@@ -34,23 +34,36 @@ This project aims to analyze self-reported health data from the NHANES 1999-2000
 1. **Import and Merge Data**:
    - Download and prepare the mortality follow-up data and link it to the demographic data using Stata.
 
-2. **Create followup.do filw**:
+2. **Create followup_mortality.do filw**:
     - use the do file from NCHS
     - edit the absolute file path
     - edit ```SURVEY``` and change it into ```NHANES_1999_2000```
-    - save it as ```followup.do```
+    - save it as ```followup_mortality.do```
       
 3. **Merge Data between NHANES and NCHS**:
     - use the following stata commands
     ```stata
       //use your own username/project repo instead of the class repo below
-      global repo "https://raw.githubusercontent.com/atenko/project/main/"
+      global repo "https://raw.githubusercontent.com/Kristen6666/project/main/"
       do ${repo}followup.do
       save followup, replace 
       import sasxport5 "https://wwwn.cdc.gov/Nchs/Nhanes/1999-2000/DEMO.XPT", clear
       merge 1:1 seqn using followup
       lookfor follow
     ```
+
+4. **Label variable**：
+   - Excellent,
+   - Very good,
+   - Good,
+   - Fair, 
+   - Poor
+
+   ```
+   replace huq010=. if huq010==9
+   label define huq 1 "Excellent" 2 "Very Good" 3 "Good" 4 "Fair" 5 "Poor"
+   label values huq010 huq 
+   ```
 
 4. **Statistical Analysis**:
    - Use 95% confidence intervals and p-values to analyze the relationship between self-reported health and mortality.
