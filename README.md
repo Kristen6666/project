@@ -1,4 +1,6 @@
-# project
+# Project(hw7)
+
+**by Kristen Chen**
 
 This project aims to analyze self-reported health data from the NHANES 1999-2000 survey and link it with follow-up mortality data. We will explore the significance of “self-reported health” as a health indicator through this analysis.
 
@@ -90,8 +92,10 @@ Survival curves and Cox regression results are provided to analyze the impact of
 5. **for HW7, adjusted for age, race, and two additional variables**
    - ![adjusted](scenario.png)
    - for the scenario of 40 year-old male who self-describes as being in good health with citizenship and with the household size of 6 compared with a person with the household size of 4.
-6. **for the whole do.file**
-   - click [here](Kristen_project.do) for the whole analysis.
+6. **for installing the whole do.file**
+   - click [here](Kristen_project.do) for the do.file.
+7. **for the Stata codes**
+   - click [here](dyndoc.html)
 
 ## Contact
 
