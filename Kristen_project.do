@@ -1,5 +1,3 @@
-
-
 //1. data
 global repo "https://raw.githubusercontent.com/Kristen6666/project/main/"
 global nhanes "https://wwwn.cdc.gov/Nchs/Nhanes/"
