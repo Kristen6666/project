@@ -138,88 +138,67 @@ graph combine semipara_unadj.gph semipara_adj.gph, ///
     ycommon ti("Hazard Ratio, 95%CI") 
 graph export unadj_adj.png, replace 
 
-//these variable names don't exist in the dataset, this is a mere demo
-use week7, clear
+//6. Scenario: A 40-year male who self-reported being in "Good Health" (huq010=3)
+cls
+    clear all
+    use week7, clear
+    replace riagendr=riagendr-1
+    stcox i.huq010 ridageyr riagendr, basesurv(s0)
+    keep s0 _t _t0 _st _d 
+    save s0, replace 
+    ereturn list 
+    matrix beta = e(b)
+    matrix vcov = e(V)
+    matrix SV = ( ///
+        0, ///
+        1, ///
+        0, ///
+        0, ///
+        0, ///
+        40, ///
+        1 ///
+    )
+    matrix SV_ref = ( ///
+        0, ///
+        1, ///
+        0, ///
+        0, ///
+        0, ///
+        60, ///
+        1 ///
+    )
+    //absolute risk
+    matrix risk_score = SV * beta'
+    matrix list risk_score
+    di exp(risk_score[1,1])
+    matrix var_prediction = SV * vcov * vcov'
+    matrix se_prediction = sqrt(var_prediction[1,1])
 
-di "What do you wish to adjust for in this analysis?" _request(varlist)
-//ridageyr riagendr ridreth1 dmdeduc3 dmdhhsiz
-capture program drop selfassess
-program define selfassess
-    syntax varlist 
-    stcox i.huq010 `varlist'
-end 
-selfassess ridageyr riagendr ridreth1 dmdcitzn dmdhhsiz
-//e(b)
-cls 
-use week7, clear
-replace riagendr=riagendr-1
-replace ridreth1=ridreth1-1
-replace dmdcitzn=dmdcitzn-1
-replace dmdhhsiz=dmdhhsiz-1
-keep if dmdcitzn==1 | dmdcitzn==0
+    matrix risk_score_ref = SV_ref * beta'
+    matrix list risk_score_ref
+    di exp(risk_score_ref[1,1])
+    matrix var_prediction_ref = SV_ref * vcov * vcov'
+    matrix se_prediction_ref = sqrt(var_prediction_ref[1,1])
 
-//stcox i.huq010 ridageyr riagendr i.ridreth1 dmdcitzn dmdhhsiz, basesurv(s0)
-//stcox i.huq010 ridageyr riagendr ridreth1 dmdcitzn dmdhhsiz, basesurv(s0)
+    local hr = exp(risk_score_ref[1,1])/exp(risk_score[1,1])
+    di `hr'
 
-stcox i.huq010 ridageyr riagendr i.ridreth1 dmdcitzn dmdhhsiz, basesurv(s0)
-keep s0 _t _t0 _st _d 
-save s0, replace 
-ereturn list 
-matrix beta = e(b)
-matrix vcov = e(V)
-matrix SV = ( ///
-    0, ///
-	1, ///
-	0, ///
-	0, ///
-	0, ///
-	40, ///
-	1, ///
-	0, ///
-	1, ///
-	4 ///	
-)
-matrix SV_ref = ( ///
-    0, ///
-	1, ///
-	0, ///
-	0, ///
-	0, ///
-	40, ///
-	1, ///
-	0, ///
-	1, ///
-	6 ///
-)
-//absolute risk
-matrix risk_score = SV * beta'
-matrix list risk_score
-di exp(risk_score[1,1])
-matrix var_prediction = SV * vcov * vcov'
-matrix se_prediction = sqrt(var_prediction[1,1])
+    //di "We conclude that `exp(risk_score[1,1])'"
 
-matrix risk_score_ref = SV_ref * beta'
-matrix list risk_score_ref
-di exp(risk_score_ref[1,1])
-matrix var_prediction_ref = SV_ref * vcov * vcov'
-matrix se_prediction_ref = sqrt(var_prediction_ref[1,1])
-
-local hr = exp(risk_score_ref[1,1])/exp(risk_score[1,1])
-di `hr'
-
-//di "We conclude that `exp(risk_score[1,1])'"
-
-//
-g f0 = (1 - s0) * 100 
-g f1_ = f0 * exp(risk_score[1,1])
-line f1 _t , ///  
-    sort connect(step step) ///
-	legend(ring(0)) ///
-    ylab(0(5)20) xlab(0(5)20) ///
-    yti("") ///
-    ti("Scenario, %", pos(11)) ///
-    xti("Years") ///
-    note("40yo male who self-describes as being in good health" ///
-                  ,size(1.5) ///
-		)
-graph export scenario.png, replace 
+    //
+    g f0 = (1 - s0) * 100 
+    g f1_ = f0 * exp(risk_score[1,1])
+   
+   line f1 _t , ///  
+        sort connect(step step) ///
+        legend(ring(0)) ///
+        ylab(0(5)20) xlab(0(5)20) ///
+        yti("") ///
+        ti("Figure:Risk of mortaltity(%) in a 40-year male who reported Good Health", size(*0.85)pos()) ///
+        xti("Person Years from Interview") ///
+        note(" "  ,size()  ///
+                     )
+   
+	graph export scenario.png, replace 
+    graph save scenario.gph, replace 
+    
