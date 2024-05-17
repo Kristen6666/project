@@ -80,17 +80,18 @@ Survival curves and Cox regression results are provided to analyze the impact of
 
 
 1. **Use nonparametric (Kaplan-Meier) method**
-   - click ![Survival Curve](nonpara.png) for K-M figure.
+   - ![K-M Curve](nonpara.png) 
 2. **Use semiparametric (Cox Regression) method**
-   - click [here](semipara_unadj.png) for the figure outlining HRs.
+   - ![cox](semipara_unadj.png) 
 3. **Use parametric (Weibull regression) method**
-   - click [here](semipara_adj.png) for HRs adjusing for age.
+   - ![Weibull regression](semipara_adj.png)
 4. **Compare the adjusted figure with unadjusted one**
-   - click [here](unadj_adj.png) for a combined figure
-6. **for HW7, adjusted for age, race, and two additional variables**
-   - click [here](scenario.png) for the scenario of 40 year-old male who self-describes as being in good health with citizenship and with the household size of 6 compared with a person with the household size of 4.
-7. **for the whole do.file**
-   - click [here](dyndoc.html) for the whole analysis.
+   - ![compare](unadj_adj.png) 
+5. **for HW7, adjusted for age, race, and two additional variables**
+   - ![adjusted](scenario.png)
+   - for the scenario of 40 year-old male who self-describes as being in good health with citizenship and with the household size of 6 compared with a person with the household size of 4.
+6. **for the whole do.file**
+   - click [here](Kristen_project.do) for the whole analysis.
 
 ## Contact
 
